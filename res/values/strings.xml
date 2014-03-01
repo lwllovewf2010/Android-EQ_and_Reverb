@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">EQ&amp;Reverb</string>
-    <string name="action_settings">Settings</string>
+    <string name="menu_save">Save</string>
     <string name="sound_spn_prompt">サウンドを選択してください</string>
     <string-array name="sound_spn_items">
         <item >Bass</item>
@@ -28,5 +28,8 @@
     </string-array>
     <string name="eqpreset_text">Preset</string>
     <string name="reverb_text">Reverb</string>
+    <string name="setting1">Setting1</string>
+    <string name="setting2">Setting2</string>
+    <string name="setting3">Setting3</string>
 
 </resources>

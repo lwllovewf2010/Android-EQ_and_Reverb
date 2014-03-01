@@ -1,9 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/menu_save"
+        android:orderInCategory="0"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:title="@string/menu_save">
+        <menu>
+            <item android:id="@+id/menu_save1" android:title="@string/setting1"></item>
+            <item android:id="@+id/menu_save2" android:title="@string/setting2"></item>
+            <item android:id="@+id/menu_save3" android:title="@string/setting3"></item>
+        </menu>
+    </item>
+    <item android:id="@+id/menu_load1" android:title="@string/setting1" android:orderInCategory="1"></item>
+    <item android:id="@+id/menu_load2" android:title="@string/setting2" android:orderInCategory="2"></item>
+    <item android:id="@+id/menu_load3" android:title="@string/setting3" android:orderInCategory="3"></item>
 
 </menu>

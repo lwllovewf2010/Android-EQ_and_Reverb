@@ -167,7 +167,6 @@ public class MainActivity extends Activity {
                     break;
                 case 1:
                     pr.setPreset(PresetReverb.PRESET_SMALLROOM);
-                    Log.d("Preset", Short.toString(pr.getPreset()));
                     break;
                 case 2:
                     pr.setPreset(PresetReverb.PRESET_MEDIUMROOM);
