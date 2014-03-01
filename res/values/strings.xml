@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">EQ&amp;Reverb</string>
+    <string name="action_settings">Settings</string>
+    <string name="sound_spn_prompt">サウンドを選択してください</string>
+    <string-array name="sound_spn_items">
+        <item >Bass</item>
+        <item >Drum</item>
+        <item >Guitar</item>
+        <item >Music</item>
+    </string-array>
+    <string name="low_text">Low</string>
+    <string name="lowmid_text">Low Mid</string>
+    <string name="mid_text">Mid</string>
+    <string name="highmid_text">High Mid</string>
+    <string name="high_text">High Mid</string>
+    <string name="eqpreset_spn_prompt">EQ Presets</string>
+    <string name="reverb_spn_prompt">Reverb Presets</string>
+    <string-array name="reverb_spn_items">
+        <item >None</item>
+        <item >Small Room</item>
+        <item >Medium Room</item>
+        <item >Large Room</item>
+        <item >Medium Hall</item>
+        <item >Large Hall</item>
+        <item >Plate</item>
+    </string-array>
+    <string name="eqpreset_text">Preset</string>
+    <string name="reverb_text">Reverb</string>
+
+</resources>
