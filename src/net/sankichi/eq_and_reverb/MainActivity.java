@@ -11,6 +11,7 @@ import android.media.audiofx.PresetReverb;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -178,6 +179,7 @@ public class MainActivity extends Activity {
                 for (int i = 0; i < eq.getNumberOfBands(); i++) {
                     eqSbs.get(i).setProgress(eq.getBandLevel((short)i) - minEQLevel);
                 }
+                Log.d("EQ", eq.getProperties().toString());
             }
             public void onNothingSelected(AdapterView<?> parent) { }
         });
@@ -226,14 +228,14 @@ public class MainActivity extends Activity {
     }
     
     private boolean load(int i) {
-        eq.setProperties(new Equalizer.Settings(pref.getString("eq" + i, "")));
+        eq.setProperties(new Equalizer.Settings(pref.getString("eq" + i, "Equalizer;curPreset=0;numBands=5;band1Level=300;band2Level=0;band3Level=0;band4Level=0;band5Level=300")));
         short bands = eq.getNumberOfBands();
         short minEQLevel = eq.getBandLevelRange()[0];
+        // eqPresetSpn.setSelection(eq.getCurrentPreset());
         for (int j = 0; j < bands; j++) {
              eqSbs.get(j).setProgress(eq.getBandLevel((short)j) - minEQLevel);
         }
-        eqPresetSpn.setSelection(eq.getNumberOfPresets());
-        pr.setProperties(new PresetReverb.Settings(pref.getString("pr" + i, "")));
+        pr.setProperties(new PresetReverb.Settings(pref.getString("pr" + i, "PresetReverb;preset=0")));
         switch (pr.getPreset()) {
         case PresetReverb.PRESET_NONE :
             prSpn.setSelection(0);
