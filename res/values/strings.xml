@@ -3,7 +3,7 @@
 
     <string name="app_name">EQ&amp;Reverb</string>
     <string name="menu_save">Save</string>
-    <string name="sound_spn_prompt">サウンドを選択してください</string>
+    <string name="sound_spn_prompt">Select a sound</string>
     <string-array name="sound_spn_items">
         <item >Bass</item>
         <item >Drum</item>

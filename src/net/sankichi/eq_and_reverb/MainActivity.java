@@ -4,14 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -25,10 +27,14 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
     
-    private Button playButton;
+    private Button playBtn;
+    private ArrayList<SeekBar> eqSbs;
+    private Spinner eqPresetSpn;
+    private Spinner prSpn;
     private MediaPlayer mp;
     private Equalizer eq;
     private PresetReverb pr;
+    private SharedPreferences pref;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        playButton = (Button)findViewById(R.id.playButton);
+        playBtn = (Button)findViewById(R.id.playBtn);
+        eqSbs = new ArrayList<SeekBar>();
+        eqPresetSpn = (Spinner)findViewById(R.id.eqPresetSpn);
+        prSpn = (Spinner)findViewById(R.id.reverbSpn);
         
         mp = new MediaPlayer();
         mp.setLooping(true);
@@ -44,6 +53,8 @@ public class MainActivity extends Activity {
         setSoundSpn();
         setEqualizer();
         setReverb();
+        
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
         
     }
    
@@ -54,13 +65,32 @@ public class MainActivity extends Activity {
         return true;
     }
     
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_save1 :
+            return save(1);
+        case R.id.menu_save2 :
+            return save(2);
+        case R.id.menu_save3 :
+            return save(3);
+        case R.id.menu_load1 :
+            return load(1);
+        case R.id.menu_load2 :
+            return load(2);
+        case R.id.menu_load3 :
+            return load(3);
+        }
+        return false;
+    }
+    
     public void play(View view) {
         if (mp.isPlaying()) {
             mp.pause();
-            playButton.setText("Play");
+            playBtn.setText("Play");
         } else {
             mp.start();
-            playButton.setText("Pause");
+            playBtn.setText("Pause");
         }
     }
     
@@ -69,7 +99,7 @@ public class MainActivity extends Activity {
         sound.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (mp.isPlaying()) playButton.setText("Play");
+                if (mp.isPlaying()) playBtn.setText("Play");
                 mp.reset();
                 mp.setLooping(true);
                 String path = "android.resource://" + getPackageName() + "/";
@@ -111,8 +141,8 @@ public class MainActivity extends Activity {
         final short maxEQLevel = eq.getBandLevelRange()[1];
         
         TableLayout eqLayout = (TableLayout)findViewById(R.id.eq);
-        final ArrayList<SeekBar> eqsbs = new ArrayList<SeekBar>();
-        for (short i = 0; i < eq.getNumberOfBands(); i++) {
+        short bands = eq.getNumberOfBands();
+        for (short i = 0; i < bands; i++) {
             final short band = i;
             TableRow row = new TableRow(this);
             
@@ -121,17 +151,17 @@ public class MainActivity extends Activity {
             freq.setText((eq.getCenterFreq(band) / 1000) + "Hz");
             row.addView(freq);
             
-            eqsbs.add(new SeekBar(this));
-            eqsbs.get(i).setMax(maxEQLevel - minEQLevel);
-            eqsbs.get(i).setProgress(eq.getBandLevel(band) - minEQLevel);
-            eqsbs.get(i).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            eqSbs.add(new SeekBar(this));
+            eqSbs.get(i).setMax(maxEQLevel - minEQLevel);
+            eqSbs.get(i).setProgress(eq.getBandLevel(band) - minEQLevel);
+            eqSbs.get(i).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     eq.setBandLevel(band, (short) (progress + minEQLevel));
                 }
                 public void onStartTrackingTouch(SeekBar seekBar) { }
                 public void onStopTrackingTouch(SeekBar seekBar) { }
             });
-            row.addView(eqsbs.get(i));
+            row.addView(eqSbs.get(i));
             
             eqLayout.addView(row);
         }
@@ -141,13 +171,12 @@ public class MainActivity extends Activity {
             presetList.add(eq.getPresetName(i));
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, presetList);
-        Spinner eqPresetSpn = (Spinner)findViewById(R.id.eqPresetSpn);
         eqPresetSpn.setAdapter(adapter);
         eqPresetSpn.setOnItemSelectedListener(new OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 eq.usePreset((short)position);
                 for (int i = 0; i < eq.getNumberOfBands(); i++) {
-                    eqsbs.get(i).setProgress(eq.getBandLevel((short)i) - minEQLevel);
+                    eqSbs.get(i).setProgress(eq.getBandLevel((short)i) - minEQLevel);
                 }
             }
             public void onNothingSelected(AdapterView<?> parent) { }
@@ -157,8 +186,7 @@ public class MainActivity extends Activity {
     private void setReverb() {
         pr = new PresetReverb(0, mp.getAudioSessionId());
         pr.setEnabled(true);
-        Spinner reverbSpn = (Spinner)findViewById(R.id.reverbSpn);
-        reverbSpn.setOnItemSelectedListener(new OnItemSelectedListener() {
+        prSpn.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
@@ -188,6 +216,48 @@ public class MainActivity extends Activity {
             @Override
             public void onNothingSelected(AdapterView<?> arg0) { }
         });
+    }
+    
+    private boolean save(int i) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("eq" + i, eq.getProperties().toString());
+        editor.putString("pr" + i, pr.getProperties().toString());
+        return editor.commit();
+    }
+    
+    private boolean load(int i) {
+        eq.setProperties(new Equalizer.Settings(pref.getString("eq" + i, "")));
+        short bands = eq.getNumberOfBands();
+        short minEQLevel = eq.getBandLevelRange()[0];
+        for (int j = 0; j < bands; j++) {
+             eqSbs.get(j).setProgress(eq.getBandLevel((short)j) - minEQLevel);
+        }
+        eqPresetSpn.setSelection(eq.getNumberOfPresets());
+        pr.setProperties(new PresetReverb.Settings(pref.getString("pr" + i, "")));
+        switch (pr.getPreset()) {
+        case PresetReverb.PRESET_NONE :
+            prSpn.setSelection(0);
+            break;
+        case PresetReverb.PRESET_SMALLROOM :
+            prSpn.setSelection(1);
+            break;
+        case PresetReverb.PRESET_MEDIUMROOM :
+            prSpn.setSelection(2);
+            break;
+        case PresetReverb.PRESET_LARGEROOM :
+            prSpn.setSelection(3);
+            break;
+        case PresetReverb.PRESET_MEDIUMHALL :
+            prSpn.setSelection(4);
+            break;
+        case PresetReverb.PRESET_LARGEHALL :
+            prSpn.setSelection(5);
+            break;
+        case PresetReverb.PRESET_PLATE :
+            prSpn.setSelection(6);
+            break;
+        }
+        return true;
     }
 
 }
