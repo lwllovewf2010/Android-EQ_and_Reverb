@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
+import android.media.audiofx.Visualizer;
+import android.media.audiofx.Visualizer.OnDataCaptureListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,10 +18,12 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -35,6 +39,7 @@ public class MainActivity extends Activity {
     private MediaPlayer mp;
     private Equalizer eq;
     private PresetReverb pr;
+    private Visualizer vs;
     private SharedPreferences pref;
     
     @Override
@@ -54,6 +59,7 @@ public class MainActivity extends Activity {
         setSoundSpn();
         setEqualizer();
         setReverb();
+        setVisualizer();
         
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         
@@ -218,6 +224,30 @@ public class MainActivity extends Activity {
             @Override
             public void onNothingSelected(AdapterView<?> arg0) { }
         });
+    }
+    
+    private void setVisualizer() {
+        final FftView fftView = new FftView(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.weight = 1;
+        fftView.setLayoutParams(layoutParams);
+        vs = new Visualizer(mp.getAudioSessionId());
+        vs.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+        vs.setDataCaptureListener(new OnDataCaptureListener() {
+            @Override
+            public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+                fftView.update(fft);
+            }
+            @Override
+            public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) { }
+        },
+        Visualizer.getMaxCaptureRate(), false, true);
+        vs.setEnabled(true);
+        fftView.setSamplingRate(vs.getSamplingRate());
+        LinearLayout main = (LinearLayout)findViewById(R.id.main);
+        main.addView(fftView, 1);
     }
     
     private boolean save(int i) {
