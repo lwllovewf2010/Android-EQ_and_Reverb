@@ -7,7 +7,8 @@
     <string-array name="sound_spn_items">
         <item >Bass</item>
         <item >Drum</item>
-        <item >Guitar</item>
+        <item >Guitar1</item>
+        <item >Guitar2</item>
         <item >Vocal</item>
         <item >Music</item>
     </string-array>

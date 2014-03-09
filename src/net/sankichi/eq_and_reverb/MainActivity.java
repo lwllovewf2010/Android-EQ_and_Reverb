@@ -118,13 +118,16 @@ public class MainActivity extends Activity {
                     case 1: // Drum
                         mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.drum));
                         break;
-                    case 2: // Guitar
-                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.guitar));
+                    case 2: // Backing
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.backing));
                         break;
-                    case 3: // Vocal
+                    case 3: // Lead
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.lead));
+                        break;
+                    case 4: // Vocal
                         mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.vocal));
                         break;
-                    case 4: // Music
+                    case 5: // Music
                         mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.music));
                         break;
                     }
