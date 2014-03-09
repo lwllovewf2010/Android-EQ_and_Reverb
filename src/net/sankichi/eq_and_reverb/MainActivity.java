@@ -112,17 +112,20 @@ public class MainActivity extends Activity {
                 String path = "android.resource://" + getPackageName() + "/";
                 try{
                     switch (position) {
-                    case 0: // Bass1
-                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.bass1));
+                    case 0: // Bass
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.bass));
                         break;
-                    case 1: // Drum1
-                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.drum1));
+                    case 1: // Drum
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.drum));
                         break;
-                    case 2: // Guitar1
-                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.guitar1));
+                    case 2: // Guitar
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.guitar));
                         break;
-                    case 3: // Music1
-                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.music1));
+                    case 3: // Vocal
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.guitar));
+                        break;
+                    case 4: // Music
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.music));
                         break;
                     }
                     mp.prepare();

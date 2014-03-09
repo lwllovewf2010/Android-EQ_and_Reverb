@@ -8,6 +8,7 @@
         <item >Bass</item>
         <item >Drum</item>
         <item >Guitar</item>
+        <item >Vocal</item>
         <item >Music</item>
     </string-array>
     <string name="low_text">Low</string>
