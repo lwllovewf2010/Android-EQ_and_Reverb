@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
                         mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.guitar));
                         break;
                     case 3: // Vocal
-                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.guitar));
+                        mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.vocal));
                         break;
                     case 4: // Music
                         mp.setDataSource(view.getContext(), Uri.parse(path + R.raw.music));
